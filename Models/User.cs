@@ -23,5 +23,10 @@ namespace Models
         }
 
         public List<Following> Followings { get; set; }
+        
+        //List of all users following you, can get the total by FollowingYou.count
+        public List<FollowedBy> FollowingYou { get; set; }
+
+        public List<Notifications> NotificationList { get; set; }
     }
 }
