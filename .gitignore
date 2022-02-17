@@ -1,5 +1,4 @@
-connectionString.txt
-appsettings.json
+
 *.editorcongfig
 
 ## Ignore Visual Studio temporary files, build results, and
