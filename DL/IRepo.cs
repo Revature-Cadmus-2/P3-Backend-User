@@ -45,5 +45,20 @@ namespace DL
         public Task<List<Following>> GetFollowingByFollowerUserIdAsync(int userId);
         
         public Task<List<Following>> GetFollowerByUserIdAsync(int userId);
+
+        // ---------- Methods for FollowedBy functionality ----------
+
+        public Task<List<FollowedBy>> GetAllFollowersAsync();
+        public Task<FollowedBy> GetFollowersByIdAsync(int followedById);
+        public Task<List<FollowedBy>> GetFollowersbyUserIdAsync(int userId);
+
+        // ---------- Methods for Notifications functionality ----------
+
+        public Task<List<Notifications>> GetAllNotificationsAsync();
+        public Task<Notifications> GetNotificationsByIdAsync(int notificationsId);
+        public Task<List<Notifications>> GetNotificationsbyUserIdAsync(int userId);
+        public Task<List<Notifications>> GetNotificationsByPostIdAsync(int postId);
+        public Task<List<Notifications>> GetNotificationsByCommentIdAsync(int commentId);
+        public Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId);
     }
 }

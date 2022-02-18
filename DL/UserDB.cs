@@ -16,6 +16,8 @@ namespace DL
         public DbSet<FollowingPost> FollowingPosts { get; set; }
 
         public DbSet<Following> Following { get; set; }
+        public DbSet<FollowedBy> Followers { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
 
     }
 }

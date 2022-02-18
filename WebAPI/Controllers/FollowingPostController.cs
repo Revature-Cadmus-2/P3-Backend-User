@@ -55,7 +55,7 @@ namespace WebAPI.Controllers
             }
         }
 
-         [HttpGet("id/{id}")]
+        [HttpGet("id/{id}")]
         public async Task<IActionResult> GetByid(int id)
         {
             FollowingPost userFollowingPost = await _bl.GetFollowingPostByIdAsync(id);
@@ -112,7 +112,6 @@ namespace WebAPI.Controllers
             return Ok(followingPost);
         }
 
-      
         [HttpDelete("id/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
