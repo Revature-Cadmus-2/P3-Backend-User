@@ -138,9 +138,9 @@ namespace BL
             return await _repo.GetNotificationsByCommentIdAsync(commentId);
             }
 
-        public Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId)
+        public async Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId)
         {
-            throw new NotImplementedException();
+            return await _repo.GetNotificationsByFollowerIdAsync(followersId);
         }
     }
 }
