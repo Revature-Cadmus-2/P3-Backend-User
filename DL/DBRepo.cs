@@ -153,10 +153,41 @@ namespace DL
         {
             return await _context.Following.Where(f => f.FollowerUserId == userId).Select(f => f).ToListAsync();
         }
-
         public async Task<List<Following>> GetFollowerByUserIdAsync(int userId)
         {
             return await _context.Following.Where(f => f.FollowingUserId == userId).Select(f => f).ToListAsync();
+        }
+
+        // ---------- Methods for FollowedBy functionality ----------
+        public async Task<List<FollowedBy>> GetAllFollowersAsync()
+        {
+            return await _context.Followers.Select(f => f).ToListAsync();
+        }
+
+        public async Task<FollowedBy> GetFollowersByIdAsync(int followedById)
+        {
+            return await _context.Followers.AsNoTracking().FirstOrDefaultAsync(f => f.Id == followedById);
+        }
+
+        public async Task<List<FollowedBy>> GetFollowersbyUserIdAsync(int userId)
+        {
+            return await _context.Followers.Where(f => f.UserId == userId).ToListAsync();
+        }
+
+        // ---------- Methods for Notifications functionality ----------
+        public async Task<List<Notifications>> GetAllNotificationsAsync()
+        {
+            return await _context.Notifications.Select(n => n).ToListAsync();
+        }
+
+        public async Task<Notifications> GetNotificationsByIdAsync(int notificationsId)
+        {
+            return await _context.Notifications.AsNoTracking().FirstOrDefaultAsync(n => n.Id == notificationsId);
+        }
+
+        public async Task<List<Notifications>> GetNotificationsbyUserIdAsync(int userId)
+        {
+            return await _context.Notifications.Where(n => n.UserId == userId).ToListAsync();
         }
     }
 }
