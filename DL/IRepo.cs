@@ -57,5 +57,8 @@ namespace DL
         public Task<List<Notifications>> GetAllNotificationsAsync();
         public Task<Notifications> GetNotificationsByIdAsync(int notificationsId);
         public Task<List<Notifications>> GetNotificationsbyUserIdAsync(int userId);
+        public Task<List<Notifications>> GetNotificationsByPostIdAsync(int postId);
+        public Task<List<Notifications>> GetNotificationsByCommentIdAsync(int commentId);
+        public Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId);
     }
 }

@@ -111,16 +111,69 @@ namespace BL
         public Task<List<Following>> GetFollowerByUserIdAsync(int userId);
 
                 // ---------- Methods for FollowedBy functionality ----------
-
+        
+        /// <summary>
+        /// Gets a list of all Followers from the database
+        /// </summary>
+        /// <returns>All followers</returns>
         public Task<List<FollowedBy>> GetAllFollowersAsync();
+
+        /// <summary>
+        /// Gets follower by its Id
+        /// </summary>
+        /// <param name="followedById"></param>
+        /// <returns>The follower</returns>
         public Task<FollowedBy> GetFollowersByIdAsync(int followedById);
+
+        /// <summary>
+        /// Gets List of current user's followers
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Current user's list of followers</returns>
         public Task<List<FollowedBy>> GetFollowersbyUserIdAsync(int userId);
 
         // ---------- Methods for Notifications functionality ----------
 
+        /// <summary>
+        /// Gets a list of notifications from the database
+        /// </summary>
+        /// <returns>All notifications</returns>
         public Task<List<Notifications>> GetAllNotificationsAsync();
+
+        /// <summary>
+        /// Gets notfication by its Id
+        /// </summary>
+        /// <param name="notificationsId"></param>
+        /// <returns>The notification</returns>
         public Task<Notifications> GetNotificationsByIdAsync(int notificationsId);
+
+        /// <summary>
+        /// Gets list of current user's notifications
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Current user's list of notifications</returns>
         public Task<List<Notifications>> GetNotificationsbyUserIdAsync(int userId);
+
+        /// <summary>
+        /// Gets list of notifications by post
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns>post's notifications</returns>
+        public Task<List<Notifications>> GetNotificationsByPostIdAsync(int postId);
+        
+        /// <summary>
+        /// Gets list of notifications by comments
+        /// </summary>
+        /// <param name="commentId"></param>
+        /// <returns>lcomment's notifications</returns>
+        public Task<List<Notifications>> GetNotificationsByCommentIdAsync(int commentId);
+
+        /// <summary>
+        /// Gets list of notifications by follower
+        /// </summary>
+        /// <param name="followersId"></param>
+        /// <returns>follower's notifications</returns>
+        public Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId);
     }
 
 }

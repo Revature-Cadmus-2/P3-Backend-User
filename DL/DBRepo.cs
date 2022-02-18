@@ -61,6 +61,21 @@ namespace DL
                     FollowerUserId = p.FollowerUserId,
                     FollowingUserId = p.FollowingUserId,
                     FollowingUserName = p.FollowingUserName
+                }).ToList(),
+                FollowingYou = _context.Followers.Where(f => f.UserId == user.Id).Select(p => new FollowedBy()
+                {
+                    Id = p.Id,
+                    UserId = p.UserId,
+                    FollowersId = p.FollowersId,
+                    FollowersUserName = p.FollowersUserName
+                }).ToList(),
+                NotificationList = _context.Notifications.Where(n => n.UserId == user.Id).Select(p => new Notifications()
+                {
+                    Id = p.Id,
+                    UserId = p.UserId,
+                    FollowersId = p.FollowersId,
+                    PostId = p.PostId,
+                    CommentId = p.CommentId
                 }).ToList()
             }).ToListAsync();
         }
@@ -84,6 +99,21 @@ namespace DL
                     FollowerUserId = p.FollowerUserId,
                     FollowingUserId = p.FollowingUserId,
                     FollowingUserName = p.FollowingUserName
+                }).ToList(),
+                FollowingYou = _context.Followers.Where(f => f.UserId == user.Id).Select(p => new FollowedBy()
+                {
+                    Id = p.Id,
+                    UserId = p.UserId,
+                    FollowersId = p.FollowersId,
+                    FollowersUserName = p.FollowersUserName
+                }).ToList(),
+                NotificationList = _context.Notifications.Where(n => n.UserId == user.Id).Select(p => new Notifications()
+                {
+                    Id = p.Id,
+                    UserId = p.UserId,
+                    FollowersId = p.FollowersId,
+                    PostId = p.PostId,
+                    CommentId = p.CommentId
                 }).ToList()
             }).FirstOrDefaultAsync(u => u.Id == userId);
         }
@@ -107,6 +137,21 @@ namespace DL
                     FollowerUserId = p.FollowerUserId,
                     FollowingUserId = p.FollowingUserId,
                     FollowingUserName = p.FollowingUserName
+                }).ToList(),
+                FollowingYou = _context.Followers.Where(f => f.UserId == user.Id).Select(p => new FollowedBy()
+                {
+                    Id = p.Id,
+                    UserId = p.UserId,
+                    FollowersId = p.FollowersId,
+                    FollowersUserName = p.FollowersUserName
+                }).ToList(),
+                NotificationList = _context.Notifications.Where(n => n.UserId == user.Id).Select(p => new Notifications()
+                {
+                    Id = p.Id,
+                    UserId = p.UserId,
+                    FollowersId = p.FollowersId,
+                    PostId = p.PostId,
+                    CommentId = p.CommentId
                 }).ToList()
             }).FirstOrDefaultAsync(u => u.Username == username);
         }
@@ -188,6 +233,21 @@ namespace DL
         public async Task<List<Notifications>> GetNotificationsbyUserIdAsync(int userId)
         {
             return await _context.Notifications.Where(n => n.UserId == userId).ToListAsync();
+        }
+
+        public async Task<List<Notifications>> GetNotificationsByPostIdAsync(int postId)
+        {
+            return await _context.Notifications.Where(n => n.PostId == postId).ToListAsync();
+        }
+
+        public async Task<List<Notifications>> GetNotificationsByCommentIdAsync(int commentId)
+        {
+            return await _context.Notifications.Where(n => n.CommentId == commentId).ToListAsync();
+        }
+
+        public async Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId)
+        {
+            return await _context.Notifications.Where(n => n.FollowersId == followersId).ToListAsync();
         }
     }
 }

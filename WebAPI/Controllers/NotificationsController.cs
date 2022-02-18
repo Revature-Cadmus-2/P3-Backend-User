@@ -35,16 +35,40 @@ namespace WebAPI.Controllers
         }
 
         // GET api/<NotificationsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetbyId(int id)
         {
-            return "value";
+            Notifications thisNotification = await _bl.GetNotificationsByIdAsync(id);
+            if(thisNotification != null)
+            {
+                return Ok(thisNotification);
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        [HttpGet("userId/{userId}")]
+        public async Task<IActionResult> GetNotificationsByUserId(int userId)
+        {
+            List<Notifications> userNotifications = await _bl.GetNotificationsbyUserIdAsync(userId);
+            if(userNotifications != null)
+            {
+                return Ok(userNotifications);
+            }
+            else
+            {
+                return NoContent();
+            }
         }
 
         // POST api/<NotificationsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Notifications newNotification)
         {
+            Notifications addedNotification = (Notifications) await _bl.AddObjectAsync(newNotification);
+            return Created("api/[controller", addedNotification);
         }
 
         // PUT api/<NotificationsController>/5
