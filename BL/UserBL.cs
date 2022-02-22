@@ -95,5 +95,52 @@ namespace BL
         {
             return await _repo.GetFollowerByUserIdAsync(userId);
         }
+
+        // ---------- Methods for FollowedBy functionality ----------
+        public async Task<List<FollowedBy>> GetAllFollowersAsync()
+        {
+            return await _repo.GetAllFollowersAsync();
+        }
+
+        public async Task<FollowedBy> GetFollowersByIdAsync(int followedById)
+        {
+            return await _repo.GetFollowersByIdAsync(followedById);
+        }
+
+        public async Task<List<FollowedBy>> GetFollowersbyUserIdAsync(int userId)
+        {
+            return await _repo.GetFollowersbyUserIdAsync(userId);
+        }
+
+        // ---------- Methods for Notifications functionality ----------
+        public async Task<List<Notifications>> GetAllNotificationsAsync()
+        {
+            return await _repo.GetAllNotificationsAsync();
+        }
+
+        public async Task<Notifications> GetNotificationsByIdAsync(int notificationsId)
+        {
+            return await _repo.GetNotificationsByIdAsync(notificationsId);
+        }
+
+        public async Task<List<Notifications>> GetNotificationsbyUserIdAsync(int userId)
+        {
+            return await _repo.GetNotificationsbyUserIdAsync(userId);
+        }
+
+        public async Task<List<Notifications>> GetNotificationsByPostIdAsync(int postId)
+        {
+            return await _repo.GetNotificationsByPostIdAsync(postId);
+        }
+
+        public async Task<List<Notifications>> GetNotificationsByCommentIdAsync(int commentId)
+        {
+            return await _repo.GetNotificationsByCommentIdAsync(commentId);
+            }
+
+        public async Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId)
+        {
+            return await _repo.GetNotificationsByFollowerIdAsync(followersId);
+        }
     }
 }
