@@ -82,45 +82,14 @@ namespace DL
 
         public async Task<User> GetUserByIdAsync(int userId)
         {
-            return await _context.Users.Include(user => user.FollowingPosts).Include(user => user.Followings).AsNoTracking().Select(user => new User()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FollowingPosts = user.FollowingPosts.Select(p => new FollowingPost()
-                {
-                    Id = p.Id,
-                    RootId = p.RootId,
-                    Postname = p.Postname,
-                    UserId = p.UserId
-                }).ToList(),
-                Followings = _context.Following.Where(f => f.FollowerUserId == user.Id).Select(p => new Following()
-                {
-                    Id = p.Id,
-                    FollowerUserId = p.FollowerUserId,
-                    FollowingUserId = p.FollowingUserId,
-                    FollowingUserName = p.FollowingUserName
-                }).ToList(),
-                FollowingYou = _context.Followers.Where(f => f.UserId == user.Id).Select(p => new FollowedBy()
-                {
-                    Id = p.Id,
-                    UserId = p.UserId,
-                    FollowersId = p.FollowersId,
-                    FollowersUserName = p.FollowersUserName
-                }).ToList(),
-                NotificationList = _context.Notifications.Where(n => n.UserId == user.Id).Select(p => new Notifications()
-                {
-                    Id = p.Id,
-                    UserId = p.UserId,
-                    FollowersId = p.FollowersId,
-                    PostId = p.PostId,
-                    CommentId = p.CommentId
-                }).ToList()
-            }).FirstOrDefaultAsync(u => u.Id == userId);
+            List<User> UserList = await _context.Users.Include(user => user.FollowingPosts).Include(user => user.Followings).Include(user => user.FollowingYou).Include(user => user.NotificationList).AsNoTracking().Where(u => u.Id == userId).Select(user => user).ToListAsync();
+
+            return UserList[0];
         }
 
         public async Task<User> GetUserByNameAsync(string username)
         {
-            return await _context.Users.Include(user => user.FollowingPosts).AsNoTracking().Select(user => new User()
+            List<User> UserList = await _context.Users.Include(user => user.FollowingPosts).Include(user => user.Followings).Include(user => user.FollowingYou).Include(user => user.NotificationList).AsNoTracking().Where(u => u.Username == username).Select(user => new User()
             {
                 Id = user.Id,
                 Username = user.Username,
@@ -153,7 +122,9 @@ namespace DL
                     PostId = p.PostId,
                     CommentId = p.CommentId
                 }).ToList()
-            }).FirstOrDefaultAsync(u => u.Username == username);
+            }).ToListAsync();
+
+            return UserList[0];
         }
 
         // ---------- Methods for FollowingPost functionality ----------
