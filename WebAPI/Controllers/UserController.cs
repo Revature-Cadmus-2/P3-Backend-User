@@ -35,7 +35,6 @@ namespace WebAPI.Controllers
             }
         }
 
-   
         [HttpGet("id/{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -63,7 +62,7 @@ namespace WebAPI.Controllers
                 return NoContent();
             }
         }
-   
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] User newUser)
         {
@@ -71,7 +70,6 @@ namespace WebAPI.Controllers
             return Created("api/[controller]", addedUser);
         }
 
-  
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromBody] User updateUser)
         {
@@ -79,7 +77,7 @@ namespace WebAPI.Controllers
             return Ok(updateUser);
         }
 
- 
+
         [HttpDelete("id/{Id}")]
         public async Task<IActionResult> Delete(int id)
         {

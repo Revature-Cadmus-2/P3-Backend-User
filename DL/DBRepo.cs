@@ -82,78 +82,77 @@ namespace DL
 
         public async Task<User> GetUserByIdAsync(int userId)
         {
-            return await _context.Users.Include(user => user.FollowingPosts).Include(user => user.Followings).AsNoTracking().Select(user => new User()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FollowingPosts = user.FollowingPosts.Select(p => new FollowingPost()
+            User user = await _context.Users.FirstOrDefaultAsync( u => u.Id == userId);
+            user.FollowingPosts = _context.FollowingPosts.Where(f => f.UserId == user.Id).Select(p => new FollowingPost()
                 {
                     Id = p.Id,
                     RootId = p.RootId,
                     Postname = p.Postname,
                     UserId = p.UserId
-                }).ToList(),
-                Followings = _context.Following.Where(f => f.FollowerUserId == user.Id).Select(p => new Following()
+                }).ToList();
+                user.Followings = _context.Following.Where(f => f.FollowerUserId == user.Id).Select(p => new Following()
                 {
                     Id = p.Id,
                     FollowerUserId = p.FollowerUserId,
                     FollowingUserId = p.FollowingUserId,
                     FollowingUserName = p.FollowingUserName
-                }).ToList(),
-                FollowingYou = _context.Followers.Where(f => f.UserId == user.Id).Select(p => new FollowedBy()
+                }).ToList();
+                user.FollowingYou = _context.Followers.Where(f => f.UserId == user.Id).Select(p => new FollowedBy()
                 {
                     Id = p.Id,
                     UserId = p.UserId,
                     FollowersId = p.FollowersId,
                     FollowersUserName = p.FollowersUserName
-                }).ToList(),
-                NotificationList = _context.Notifications.Where(n => n.UserId == user.Id).Select(p => new Notifications()
+                }).ToList();
+                user.NotificationList = _context.Notifications.Where(n => n.UserId == user.Id).Select(p => new Notifications()
                 {
                     Id = p.Id,
                     UserId = p.UserId,
                     FollowersId = p.FollowersId,
                     PostId = p.PostId,
                     CommentId = p.CommentId
-                }).ToList()
-            }).FirstOrDefaultAsync(u => u.Id == userId);
+                }).ToList();
+        
+            return user;
         }
 
         public async Task<User> GetUserByNameAsync(string username)
         {
-            return await _context.Users.Include(user => user.FollowingPosts).AsNoTracking().Select(user => new User()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FollowingPosts = user.FollowingPosts.Select(p => new FollowingPost()
+
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+    
+                user.FollowingPosts = _context.FollowingPosts.Where(f => f.UserId == user.Id).Select(p => new FollowingPost()
                 {
                     Id = p.Id,
                     RootId = p.RootId,
                     Postname = p.Postname,
                     UserId = p.UserId
-                }).ToList(),
-                Followings = _context.Following.Where(f => f.FollowerUserId == user.Id).Select(p => new Following()
+                }).ToList();
+                user.Followings = _context.Following.Where(f => f.FollowerUserId == user.Id).Select(p => new Following()
                 {
                     Id = p.Id,
                     FollowerUserId = p.FollowerUserId,
                     FollowingUserId = p.FollowingUserId,
                     FollowingUserName = p.FollowingUserName
-                }).ToList(),
-                FollowingYou = _context.Followers.Where(f => f.UserId == user.Id).Select(p => new FollowedBy()
+                }).ToList();
+                user.FollowingYou = _context.Followers.Where(f => f.UserId == user.Id).Select(p => new FollowedBy()
                 {
                     Id = p.Id,
                     UserId = p.UserId,
                     FollowersId = p.FollowersId,
                     FollowersUserName = p.FollowersUserName
-                }).ToList(),
-                NotificationList = _context.Notifications.Where(n => n.UserId == user.Id).Select(p => new Notifications()
+                }).ToList();
+                user.NotificationList = _context.Notifications.Where(n => n.UserId == user.Id).Select(p => new Notifications()
                 {
                     Id = p.Id,
                     UserId = p.UserId,
                     FollowersId = p.FollowersId,
                     PostId = p.PostId,
                     CommentId = p.CommentId
-                }).ToList()
-            }).FirstOrDefaultAsync(u => u.Username == username);
+                }).ToList();
+        
+
+            return user;
         }
 
         // ---------- Methods for FollowingPost functionality ----------
