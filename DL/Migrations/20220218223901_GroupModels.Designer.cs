@@ -4,6 +4,7 @@ using DL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,39 +12,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DL.Migrations
 {
     [DbContext(typeof(UserDB))]
-    partial class UserDBModelSnapshot : ModelSnapshot
+    [Migration("20220218223901_GroupModels")]
+    partial class GroupModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+#pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "6.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Models.FollowedBy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("FollowersId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FollowersUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Followers");
-                });
 
             modelBuilder.Entity("Models.Following", b =>
                 {
@@ -96,20 +75,6 @@ namespace DL.Migrations
                     b.ToTable("FollowingPosts");
                 });
 
-            modelBuilder.Entity("Models.Notifications", b =>
-            {
-
-                    b.Property<int?>("CommentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FollowersId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId");
-            });
             modelBuilder.Entity("Models.Group", b =>
                 {
                     b.Property<int>("Id")
@@ -160,7 +125,6 @@ namespace DL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
                     b.ToTable("GroupMembers");
                 });
 
@@ -181,15 +145,6 @@ namespace DL.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Models.FollowedBy", b =>
-                {
-                    b.HasOne("Models.User", null)
-                        .WithMany("FollowingYou")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Models.Following", b =>
                 {
                     b.HasOne("Models.User", null)
@@ -206,14 +161,6 @@ namespace DL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.Notifications", b =>
-                {
-                    b.HasOne("Models.User", null)
-                        .WithMany("NotificationList")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
             modelBuilder.Entity("Models.GroupMembers", b =>
                 {
                     b.HasOne("Models.User", null)
@@ -225,13 +172,11 @@ namespace DL.Migrations
                 {
                     b.Navigation("FollowingPosts");
 
-                    b.Navigation("FollowingYou");
-
                     b.Navigation("Followings");
 
-                    b.Navigation("NotificationList");
                     b.Navigation("GroupsJoined");
                 });
+#pragma warning restore 612, 618
         }
     }
 }
