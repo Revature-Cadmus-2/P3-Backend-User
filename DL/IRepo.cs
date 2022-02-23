@@ -60,5 +60,19 @@ namespace DL
         public Task<List<Notifications>> GetNotificationsByPostIdAsync(int postId);
         public Task<List<Notifications>> GetNotificationsByCommentIdAsync(int commentId);
         public Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId);
+        // ---------- Methods for Grouping functionality ----------
+
+        public Task<List<Group>> GetAllGroupsAsync();
+        
+        public Task<Group> GetGroupByIdAsync(int groupId);
+        
+        public Task<List<Group>> GetGroupsByGroupNameAsync(string searchTerm);
+
+        // ---------- Methods for GroupMember functionality ----------
+
+        public Task<List<GroupMembers>> GetGroupsByUserIdAsync(int memberUserId);
+
+        public Task RemoveMemberFromGroupAsync (int groupId, int memberUserId);
+
     }
 }
