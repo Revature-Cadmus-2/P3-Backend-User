@@ -29,7 +29,9 @@ namespace Models
 
         public List<Notifications> NotificationList { get; set; }
 
-        public List<FollowingPost> Bookmark {get; set;}
+        public List<Bookmark> BookmarkList {get; set;}
+
+        public string PictureLink {get; set;}
         
         
 
