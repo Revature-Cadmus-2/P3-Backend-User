@@ -28,5 +28,10 @@ namespace Models
         public List<FollowedBy> FollowingYou { get; set; }
 
         public List<Notifications> NotificationList { get; set; }
+
+        public List<FollowingPost> Bookmark {get; set;}
+        
+        
+
     }
 }
