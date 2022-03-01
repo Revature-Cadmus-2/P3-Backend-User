@@ -13,4 +13,6 @@ public class Notifications
     public int? PostId { get; set; }
     //not required
     public int? CommentId { get; set; }
+
+    public string? message { get; set; }
 }

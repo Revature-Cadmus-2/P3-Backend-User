@@ -17,7 +17,7 @@ namespace DL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -43,7 +43,7 @@ namespace DL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FollowedBy");
+                    b.ToTable("Followers");
                 });
 
             modelBuilder.Entity("Models.Following", b =>
@@ -110,6 +110,9 @@ namespace DL.Migrations
 
                     b.Property<int?>("FollowersId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
