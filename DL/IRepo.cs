@@ -60,5 +60,6 @@ namespace DL
         public Task<List<Notifications>> GetNotificationsByPostIdAsync(int postId);
         public Task<List<Notifications>> GetNotificationsByCommentIdAsync(int commentId);
         public Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId);
+        public Task<User> AddPictureAsync(string username, string imgurl);
     }
 }

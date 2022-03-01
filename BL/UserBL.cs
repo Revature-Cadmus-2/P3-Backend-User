@@ -142,5 +142,9 @@ namespace BL
         {
             return await _repo.GetNotificationsByFollowerIdAsync(followersId);
         }
+        public async Task<User> AddPictureAsync(string username, string imgurl)
+        {
+            return await _repo.AddPictureAsync(username, imgurl);
+        }
     }
 }

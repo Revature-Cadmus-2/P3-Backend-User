@@ -174,6 +174,7 @@ namespace BL
         /// <param name="followersId"></param>
         /// <returns>follower's notifications</returns>
         public Task<List<Notifications>> GetNotificationsByFollowerIdAsync(int followersId);
+        public Task<User> AddPictureAsync(string username, string imgurl);
     }
 
 }
