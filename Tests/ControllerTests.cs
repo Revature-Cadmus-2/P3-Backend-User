@@ -249,7 +249,7 @@ namespace Tests
             FollowingPostController service = new FollowingPostController(mockBL.Object);
 
             var result = await service.Get() as ObjectResult;
-           
+
             Assert.Null(result);
         }
 
@@ -509,21 +509,21 @@ namespace Tests
                     Id = 2,
                     FollowingUserName = "test2",
                     FollowerUserId = 2,
-                   
+
                 },
                 new Following()
                 {
                     Id = 3,
                     FollowingUserName = "test3",
                     FollowerUserId = 2,
-                   
+
                 },
                 new Following()
                 {
                     Id = 4,
                     FollowingUserName = "test4",
                     FollowerUserId = 2,
-                   
+
                 }
             };
             var mockBL = new Mock<IBL>();
@@ -638,5 +638,332 @@ namespace Tests
             Assert.NotNull(result);
         }
         
+        [Fact]
+        public async Task GetFollowedByShouldReturnListofFollowedByAsync()
+        {
+            List<FollowedBy> mockFollowedBy = new List<FollowedBy>()
+            {
+                new FollowedBy()
+                {
+                    Id = 1,
+                    UserId = 1,
+                    FollowersId = 2,
+                    FollowersUserName = "follower1"
+                },
+                new FollowedBy()
+                {
+                    Id = 2,
+                    UserId = 2,
+                    FollowersId = 1,
+                    FollowersUserName = "follower2"
+                }
+            };
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.GetAllFollowersAsync()).ReturnsAsync(mockFollowedBy);
+
+            FollowedByController service = new FollowedByController(mockBL.Object);
+
+            var result = await service.Get() as ObjectResult;
+            var actualResult = (List<FollowedBy>)result.Value;
+
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)result.StatusCode);
+            Assert.Equal(2, actualResult.Count);
+        }
+
+        [Fact]
+        public async Task GetFollowersNullShouldReturnNullAsync()
+        {
+            List<FollowedBy> mockFollowedBy = null;
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.GetAllFollowersAsync()).ReturnsAsync(mockFollowedBy);
+
+            FollowedByController service = new FollowedByController(mockBL.Object);
+
+            var result = await service.Get() as ObjectResult;
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task GetFollowedByByIdShouldReturnFollowedBy()
+        {
+            FollowedBy mockFollowedBy =  new FollowedBy()
+            {
+                Id = 1,
+                UserId = 1,
+                FollowersId = 2,
+                FollowersUserName = "follower1"
+            };
+            
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.GetFollowersByIdAsync(1)).ReturnsAsync(mockFollowedBy);
+
+            FollowedByController service = new FollowedByController(mockBL.Object);
+
+            var result = await service.GetbyId(1) as ObjectResult;
+            var actualResult = result.Value;
+            var noresult = await service.GetbyId(-1) as ObjectResult;
+
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Null(noresult);
+        }
+
+        [Fact]
+        public async Task GetFollowersByUserIdShouldReturnListofFollowersAsync()
+        {
+            List<FollowedBy> mockFollowedBy = new List<FollowedBy>()
+            {
+                new FollowedBy()
+                {
+                    Id = 2,
+                    UserId = 2,
+                    FollowersId = 3,
+                    FollowersUserName = "follower1"
+
+                },
+                new FollowedBy()
+                {
+                    Id = 3,
+                    UserId = 3,
+                    FollowersId = 4,
+                    FollowersUserName = "follower2"
+
+                },
+                new FollowedBy()
+                {
+                    Id = 4,
+                    UserId = 4,
+                    FollowersId = 5,
+                    FollowersUserName = "follower4"
+
+                }
+            };
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.GetFollowersbyUserIdAsync(2)).ReturnsAsync(mockFollowedBy);
+            
+            WebAPI.Controllers.FollowedByController service = new WebAPI.Controllers.FollowedByController(mockBL.Object);
+
+            var result = await service.GetFollowersByUserId(2) as ObjectResult;
+            var noresult = await service.GetFollowersByUserId(-1) as ObjectResult;
+            List<FollowedBy> actualResult = (List<FollowedBy>)result.Value;
+            
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)result.StatusCode);
+            Assert.Equal(3, actualResult.Count);
+            Assert.Equal(2, actualResult[0].Id);
+            Assert.Null(noresult);
+        }
+
+        [Fact]
+        public async Task AddShouldAddFollowers()
+        {
+            FollowedBy mockFollowedBy = new FollowedBy()
+            {
+                Id = 2,
+                UserId = 2,
+                FollowersId = 3,
+                FollowersUserName = "follower1"
+            };
+
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.AddObjectAsync(mockFollowedBy)).ReturnsAsync(mockFollowedBy);
+
+            WebAPI.Controllers.FollowedByController service = new WebAPI.Controllers.FollowedByController(mockBL.Object);
+
+            var result = await service.Post(mockFollowedBy) as ObjectResult;
+            var actualResult = (FollowedBy)result.Value;
+
+            Assert.IsType<CreatedResult>(result);
+            Assert.Equal(HttpStatusCode.Created, (HttpStatusCode)result.StatusCode);
+            Assert.Equal(mockFollowedBy, actualResult);
+        }
+
+        [Fact]
+        public async Task DeleteByIdShouldDeleteFollowedBy()
+        {
+            FollowedBy mockFollowedBy = new FollowedBy()
+            {
+                Id = 1,
+                UserId = 1,
+                FollowersId = 2,
+                FollowersUserName = "follower1"
+            };
+
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.DeleteObjectAsync(mockFollowedBy));
+
+            WebAPI.Controllers.FollowedByController service = new WebAPI.Controllers.FollowedByController(mockBL.Object);
+
+            var result = await service.Delete(mockFollowedBy.Id) as ObjectResult;
+            var actualResult = result.Value;
+
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)result.StatusCode);
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task GetAllNotificationsShouldReturnListofFollowedByAsync()
+        {
+            List<Notifications> mockNotifications = new List<Notifications>()
+            {
+                new Notifications()
+                {
+                    Id = 1,
+                    UserId = 1
+                },
+                new Notifications()
+                {
+                    Id = 2,
+                    UserId = 2
+                }
+            };
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.GetAllNotificationsAsync()).ReturnsAsync(mockNotifications);
+
+            NotificationsController service = new NotificationsController(mockBL.Object);
+
+            var result = await service.Get() as ObjectResult;
+            var actualResult = (List<Notifications>)result.Value;
+
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)result.StatusCode);
+            Assert.Equal(2, actualResult.Count);
+        }
+
+        [Fact]
+        public async Task GetNotificationsNullShouldReturnNullAsync()
+        {
+            List<Notifications> mockNotifications = null;
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.GetAllNotificationsAsync()).ReturnsAsync(mockNotifications);
+
+            NotificationsController service = new NotificationsController(mockBL.Object);
+
+            var result = await service.Get() as ObjectResult;
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task GetNotificationsByIdShouldReturnNotifications()
+        {
+            Notifications mockNotifications =  new Notifications()
+            {
+                Id = 1,
+                FollowersId = 1,
+                PostId = 1,
+                CommentId = 1,
+                message = "message1",
+                UserId = 4
+            };
+            
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.GetNotificationsByIdAsync(1)).ReturnsAsync(mockNotifications);
+
+            NotificationsController service = new NotificationsController(mockBL.Object);
+
+            var result = await service.GetbyId(1) as ObjectResult;
+            var actualResult = result.Value;
+            var noresult = await service.GetbyId(-1) as ObjectResult;
+
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Null(noresult);
+        }
+
+                [Fact]
+        public async Task GetNotificationsByUserIdShouldReturnListofNotificationsAsync()
+        {
+            List<Notifications> mockNotifications = new List<Notifications>()
+            {
+                new Notifications()
+                {
+                    Id = 2,
+                    UserId = 2,
+                },
+                new Notifications()
+                {
+                    Id = 3,
+                    UserId = 3,
+                },
+                new Notifications()
+                {
+                    Id = 4,
+                    UserId = 4,
+                }
+            };
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.GetNotificationsbyUserIdAsync(2)).ReturnsAsync(mockNotifications);
+            
+            WebAPI.Controllers.NotificationsController service = new WebAPI.Controllers.NotificationsController(mockBL.Object);
+
+            var result = await service.GetNotificationsByUserId(2) as ObjectResult;
+            var noresult = await service.GetNotificationsByUserId(-1) as ObjectResult;
+            List<Notifications> actualResult = (List<Notifications>)result.Value;
+            
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)result.StatusCode);
+            Assert.Equal(3, actualResult.Count);
+            Assert.Equal(2, actualResult[0].Id);
+            Assert.Null(noresult);
+        }
+
+        [Fact]
+        public async Task AddShouldAddNotifications()
+        {
+            Notifications mockNotifications = new Notifications()
+            {
+                Id = 2,
+                UserId = 2,
+                FollowersId = 3,
+            };
+
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.AddObjectAsync(mockNotifications)).ReturnsAsync(mockNotifications);
+
+            WebAPI.Controllers.NotificationsController service = new WebAPI.Controllers.NotificationsController(mockBL.Object);
+
+            var result = await service.Post(mockNotifications) as ObjectResult;
+            var actualResult = (Notifications)result.Value;
+
+            Assert.IsType<CreatedResult>(result);
+            Assert.Equal(HttpStatusCode.Created, (HttpStatusCode)result.StatusCode);
+            Assert.Equal(mockNotifications, actualResult);
+        }
+
+        [Fact]
+        public async Task DeleteByIdShouldDeleteNotifications()
+        {
+            Notifications mockNotifications = new Notifications()
+            {
+                Id = 1,
+                UserId = 1,
+            };
+
+            var mockBL = new Mock<IBL>();
+
+            mockBL.Setup(x => x.DeleteObjectAsync(mockNotifications));
+
+            WebAPI.Controllers.NotificationsController service = new WebAPI.Controllers.NotificationsController(mockBL.Object);
+
+            var result = await service.Delete(mockNotifications.Id) as ObjectResult;
+            var actualResult = result.Value;
+
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)result.StatusCode);
+            Assert.NotNull(result);
+        }
     }
 }

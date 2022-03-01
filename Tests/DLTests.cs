@@ -32,7 +32,6 @@ namespace Tests
 
             Assert.NotNull(users);
             Assert.Equal(2, users.Count);
-           
         }
 
         [Fact]
@@ -406,10 +405,279 @@ namespace Tests
                         FollowingUserId = 1,
                         FollowingUserName = "Test1"
                     });
+
+                context.Followers.AddRange(
+                    new FollowedBy()
+                    {
+                        Id = 1,
+                        UserId = 1,
+                        FollowersId = 2,
+                        FollowersUserName = "Test"
+                    },
+                    new FollowedBy()
+                    {
+                        Id = 2,
+                        UserId = 2,
+                        FollowersId = 1,
+                        FollowersUserName = "Test1"
+                    });
+
+                context.Notifications.AddRange(
+                    new Notifications()
+                    {
+                        Id = 1,
+                        UserId = 1,
+                        FollowersId = 2,
+                        PostId = 1,
+                        CommentId = 1,
+                        message = "Message"
+                    },
+                    new Notifications()
+                    {
+                        Id = 2,
+                        UserId = 2,
+                        FollowersId = 1,
+                        PostId = 2,
+                        CommentId = 2,
+                        message = "Message1"
+                    });
                 context.SaveChanges();
                 context.ChangeTracker.Clear();
             }
         }
 
+        [Fact]
+        public async void GetAllFollowersAsync()
+        {
+            using var context = new UserDB(options);
+
+            IRepo repo = new DBRepo(context);
+
+            List<FollowedBy> followers = await repo.GetAllFollowersAsync();
+
+            Assert.NotNull(followers);
+        }
+
+        [Fact]
+        public async void AddingFollowerUserShouldAddFollower()
+        {
+            using(var context = new UserDB(options))
+            {
+                IRepo repo = new DBRepo(context);
+                FollowedBy followerToAdd = new FollowedBy()
+                {
+                    Id = 3,
+                    UserId = 1,
+                    FollowersId = 2,
+                    FollowersUserName ="Follower1"
+                };
+
+                followerToAdd = (FollowedBy) await repo.AddObjectAsync(followerToAdd);
+
+            }
+            using(var context = new UserDB(options))
+            {
+                FollowedBy follower = await context.Followers.FirstOrDefaultAsync(f => f.Id == 3);
+
+                Assert.NotNull(follower);
+                Assert.Equal("Follower1", follower.FollowersUserName);
+            }
+        }
+
+        [Fact]
+        public async void DeletingFollowerShoulddeleteFollower()
+        {
+            using (var context = new UserDB(options))
+            {
+                IRepo repo = new DBRepo(context);
+                FollowedBy followerToAdd = new FollowedBy()
+                {
+                    Id = 4,
+                    FollowersUserName = "Test4",
+                    UserId = 2,
+                    FollowersId = 3
+                };
+
+                followerToAdd = (FollowedBy)await repo.AddObjectAsync(followerToAdd);
+
+                FollowedBy followerToDelete = new FollowedBy()
+                {
+                    Id = 4,
+                    FollowersUserName = "Test4",
+                    UserId = 2,
+                    FollowersId = 3
+                };
+
+                await repo.DeleteObjectAsync(followerToDelete);
+
+            }
+            using (var context = new UserDB(options))
+            {
+                FollowedBy follower = await context.Followers.FirstOrDefaultAsync(f => f.Id == 4);
+                IRepo repo = new DBRepo(context);
+                List<FollowedBy> followers = await repo.GetAllFollowersAsync();
+            
+                Assert.Null(follower);
+                
+            }
+        }
+
+        [Fact]
+        public async void GetFollowersByIdShouldGetTheFollower()
+        {
+
+            using (var context = new UserDB(options))
+            {
+                IRepo repo = new DBRepo(context);
+                FollowedBy followerToGet = await repo.GetFollowersByIdAsync(1);
+                FollowedBy follower = await context.Followers.FirstOrDefaultAsync(f => f.Id == 1);
+                Assert.NotNull(follower);
+                Assert.Equal(follower.FollowersUserName, followerToGet.FollowersUserName);
+            }
+        }
+
+        [Fact]
+        public async void GetFollowersByUserIdAsyncShouldReturnFollowers()
+        {
+            using var context = new UserDB(options);
+            IRepo repo = new DBRepo(context);
+
+            List<FollowedBy> followers = await repo.GetFollowersbyUserIdAsync(1);
+
+            Assert.NotNull(followers);
+            Assert.True(1 == followers.Count);
+        }
+
+        [Fact]
+        public async void GetAllNotificationsAsync()
+        {
+            using var context = new UserDB(options);
+
+            IRepo repo = new DBRepo(context);
+
+            List<Notifications> notifications = await repo.GetAllNotificationsAsync();
+
+            Assert.NotNull(notifications);
+        }
+
+        [Fact]
+        public async void AddingNotificationShouldAddNotification()
+        {
+            using(var context = new UserDB(options))
+            {
+                IRepo repo = new DBRepo(context);
+                Notifications notificationToAdd = new Notifications()
+                {
+                    Id = 3,
+                    UserId = 2
+                };
+
+                notificationToAdd = (Notifications) await repo.AddObjectAsync(notificationToAdd);
+
+            }
+            using(var context = new UserDB(options))
+            {
+                Notifications notifications = await context.Notifications.FirstOrDefaultAsync(n => n.Id == 3);
+
+                Assert.NotNull(notifications);
+                Assert.Equal(2, notifications.UserId);
+            }
+        }
+
+        [Fact]
+        public async void DeletingNotificationShoulddeleteNotification()
+        {
+            using (var context = new UserDB(options))
+            {
+                IRepo repo = new DBRepo(context);
+                Notifications notificationToAdd = new Notifications()
+                {
+                    Id = 4,
+                    UserId = 2,
+                };
+
+                notificationToAdd = (Notifications)await repo.AddObjectAsync(notificationToAdd);
+
+                Notifications notificationToDelete = new Notifications()
+                {
+                    Id = 4,
+                    UserId = 2,
+                };
+
+                await repo.DeleteObjectAsync(notificationToDelete);
+
+            }
+            using (var context = new UserDB(options))
+            {
+                Notifications notification = await context.Notifications.FirstOrDefaultAsync(f => f.Id == 4);
+                IRepo repo = new DBRepo(context);
+                List<Notifications> followers = await repo.GetAllNotificationsAsync();
+            
+                Assert.Null(notification);
+                
+            }
+        }
+
+        [Fact]
+        public async void GetNotificationsByIdShouldGetTheNotification()
+        {
+
+            using (var context = new UserDB(options))
+            {
+                IRepo repo = new DBRepo(context);
+                Notifications notificationToGet = await repo.GetNotificationsByIdAsync(1);
+                Notifications notification = await context.Notifications.FirstOrDefaultAsync(n => n.Id == 1);
+                Assert.NotNull(notification);
+                Assert.Equal(notification.message, notificationToGet.message);
+            }
+        }
+
+        [Fact]
+        public async void GetNotificationsByUserIdAsyncShouldReturnNotifications()
+        {
+            using var context = new UserDB(options);
+            IRepo repo = new DBRepo(context);
+
+            List<Notifications> notifications = await repo.GetNotificationsbyUserIdAsync(1);
+
+            Assert.NotNull(notifications);
+            Assert.True(1 == notifications.Count);
+        }
+
+        [Fact]
+        public async void GetNotificationsByPostIdAsyncShouldReturnNotifications()
+        {
+            using var context = new UserDB(options);
+            IRepo repo = new DBRepo(context);
+
+            List<Notifications> notifications = await repo.GetNotificationsByPostIdAsync(1);
+
+            Assert.NotNull(notifications);
+            Assert.True(1 == notifications.Count);
+        }
+
+        [Fact]
+        public async void GetNotificationsByCommentIdAsyncShouldReturnNotifications()
+        {
+            using var context = new UserDB(options);
+            IRepo repo = new DBRepo(context);
+
+            List<Notifications> notifications = await repo.GetNotificationsByCommentIdAsync(1);
+
+            Assert.NotNull(notifications);
+            Assert.True(1 == notifications.Count);
+        }
+
+        [Fact]
+        public async void GetNotificationsByFollowerIdAsyncShouldReturnNotifications()
+        {
+            using var context = new UserDB(options);
+            IRepo repo = new DBRepo(context);
+
+            List<Notifications> notifications = await repo.GetNotificationsByFollowerIdAsync(1);
+
+            Assert.NotNull(notifications);
+            Assert.True(1 == notifications.Count);
+        }
     }
 }
