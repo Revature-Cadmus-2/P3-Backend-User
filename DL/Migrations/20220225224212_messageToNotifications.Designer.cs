@@ -4,6 +4,7 @@ using DL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DL.Migrations
 {
     [DbContext(typeof(UserDB))]
-    partial class UserDBModelSnapshot : ModelSnapshot
+    [Migration("20220225224212_messageToNotifications")]
+    partial class messageToNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,24 +23,6 @@ namespace DL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Models.Bookmark", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Bookmark");
-                });
 
             modelBuilder.Entity("Models.FollowedBy", b =>
                 {
@@ -129,9 +113,6 @@ namespace DL.Migrations
                     b.Property<int?>("FollowersId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
 
@@ -156,9 +137,6 @@ namespace DL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("PictureLink")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -166,15 +144,6 @@ namespace DL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Models.Bookmark", b =>
-                {
-                    b.HasOne("Models.User", null)
-                        .WithMany("BookmarkList")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.FollowedBy", b =>
@@ -213,8 +182,6 @@ namespace DL.Migrations
 
             modelBuilder.Entity("Models.User", b =>
                 {
-                    b.Navigation("BookmarkList");
-
                     b.Navigation("FollowingPosts");
 
                     b.Navigation("FollowingYou");
