@@ -9,6 +9,7 @@ appsettings.Development.json
 appsettings.json
 # wanting to update
 
+appsettings.json
 # User-specific files
 *.rsuser
 *.suo

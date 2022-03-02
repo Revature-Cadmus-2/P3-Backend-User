@@ -79,8 +79,11 @@ namespace WebAPI.Controllers
 
         // DELETE api/<NotificationsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            Notifications deleteNotifications = await _bl.GetNotificationsByIdAsync(id);
+            await _bl.DeleteObjectAsync(deleteNotifications);
+            return Ok(deleteNotifications);
         }
     }
 }

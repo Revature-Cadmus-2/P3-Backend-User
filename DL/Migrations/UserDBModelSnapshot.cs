@@ -123,6 +123,9 @@ namespace DL.Migrations
                     b.Property<int?>("FollowersId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
 
