@@ -284,5 +284,15 @@ namespace DL
                         _context.ChangeTracker.Clear();
         }
         
+        public async Task<User> AddPictureAsync(string username, string imgurl)
+        {
+            User userToUpdate = await GetUserByNameAsync(username);
+            userToUpdate.Username = username;
+            userToUpdate.PictureLink = imgurl;
+            _context.Update(userToUpdate);
+            await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
+            return userToUpdate;
+        }
     }
 }

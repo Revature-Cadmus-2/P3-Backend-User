@@ -212,6 +212,7 @@ namespace BL
         /// <param name="memberUserId"></param>
         /// <returns></returns>
         public Task RemoveMemberFromGroupAsync (int groupId, int memberUserId);
+        public Task<User> AddPictureAsync(string username, string imgurl);
     }
 
 }

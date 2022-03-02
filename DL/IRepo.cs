@@ -74,5 +74,6 @@ namespace DL
 
         public Task RemoveMemberFromGroupAsync (int groupId, int memberUserId);
 
+        public Task<User> AddPictureAsync(string username, string imgurl);
     }
 }
