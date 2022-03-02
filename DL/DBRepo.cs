@@ -82,7 +82,9 @@ namespace DL
 
         public async Task<User> GetUserByIdAsync(int userId)
         {
+
             User user = await _context.Users.FirstOrDefaultAsync( u => u.Id == userId);
+            if (user != null) {
             user.FollowingPosts = _context.FollowingPosts.Where(f => f.UserId == user.Id).Select(p => new FollowingPost()
                 {
                     Id = p.Id,
@@ -112,6 +114,7 @@ namespace DL
                     PostId = p.PostId,
                     CommentId = p.CommentId
                 }).ToList();
+            }
         
             return user;
         }
@@ -120,7 +123,7 @@ namespace DL
         {
 
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
-    
+            if (user != null) {
                 user.FollowingPosts = _context.FollowingPosts.Where(f => f.UserId == user.Id).Select(p => new FollowingPost()
                 {
                     Id = p.Id,
@@ -150,7 +153,7 @@ namespace DL
                     PostId = p.PostId,
                     CommentId = p.CommentId
                 }).ToList();
-        
+            }
 
             return user;
         }
@@ -281,5 +284,15 @@ namespace DL
                         _context.ChangeTracker.Clear();
         }
         
+        public async Task<User> AddPictureAsync(string username, string imgurl)
+        {
+            User userToUpdate = await GetUserByNameAsync(username);
+            userToUpdate.Username = username;
+            userToUpdate.PictureLink = imgurl;
+            _context.Update(userToUpdate);
+            await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
+            return userToUpdate;
+        }
     }
 }

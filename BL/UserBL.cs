@@ -170,5 +170,9 @@ namespace BL
         {
             await _repo.RemoveMemberFromGroupAsync(groupId, memberUserId);
         }
+        public async Task<User> AddPictureAsync(string username, string imgurl)
+        {
+            return await _repo.AddPictureAsync(username, imgurl);
+        }
     }
 }

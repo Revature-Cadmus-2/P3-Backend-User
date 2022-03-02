@@ -93,5 +93,12 @@ namespace WebAPI.Controllers
             await _bl.DeleteObjectAsync(deleteUser);
             return Ok(deleteUser);
         }
+        [HttpPut("UpdatePicture")]
+        public async Task<IActionResult> Put(string username, string imgurl)
+        {
+            User updatedUser = await _bl.AddPictureAsync(username, imgurl);
+
+            return Ok(updatedUser);
+        }
     }
 }

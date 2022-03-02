@@ -30,6 +30,10 @@ namespace Models
         public List<Following> Followings { get; set; } //Get what users are being followed
         
         public List<GroupMembers> GroupsJoined { get; set; } //Get what groups are being followed
+
+        public List<Bookmark> BookmarkList {get; set;}
+
+        public string PictureLink {get; set;}
     }
 }
 
